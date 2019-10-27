@@ -19,7 +19,7 @@ import com.imooc.security.LoginUrlEntryPoint;
  * Created by 瓦力.
  */
 @EnableWebSecurity
-@EnableGlobalMethodSecurity
+@EnableGlobalMethodSecurity(prePostEnabled=true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**

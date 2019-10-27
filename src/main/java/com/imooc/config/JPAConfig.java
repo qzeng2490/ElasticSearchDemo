@@ -3,8 +3,8 @@ package com.imooc.config;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
-import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -17,9 +17,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 /**
  * Created by 瓦力.
  */
-@Configuration
-@EnableJpaRepositories(basePackages = "com.imooc.repository")
-@EnableTransactionManagement
+//@Configuration
+//@EnableJpaRepositories(basePackages = "com.imooc.repository")
+//@EnableTransactionManagement
 public class JPAConfig {
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource")

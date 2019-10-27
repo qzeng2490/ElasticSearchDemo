@@ -16,7 +16,7 @@ public class UserRepositoryTest extends ApplicationTests {
 
     @Test
     public void testFindOne() {
-        User user = userRepository.findOne(1L);
+        User user = userRepository.findById(1L).orElse(null);
         Assert.assertEquals("wali", user.getName());
     }
 }

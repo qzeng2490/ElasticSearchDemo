@@ -27,12 +27,12 @@ public class HouseSort {
     public static Sort generateSort(String key, String directionKey) {
         key = getSortKey(key);
 
-        Sort.Direction direction = Sort.Direction.fromStringOrNull(directionKey);
+        Sort.Direction direction = Sort.Direction.fromOptionalString(directionKey).orElse(null);
         if (direction == null) {
             direction = Sort.Direction.DESC;
         }
 
-        return new Sort(direction, key);
+        return Sort.by(direction, key);
     }
 
     public static String getSortKey(String key) {

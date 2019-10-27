@@ -186,10 +186,10 @@ public class HouseServiceImpl implements IHouseService {
     public ServiceMultiResult<HouseDTO> adminQuery(DatatableSearch searchBody) {
         List<HouseDTO> houseDTOS = new ArrayList<>();
 
-        Sort sort = new Sort(Sort.Direction.fromString(searchBody.getDirection()), searchBody.getOrderBy());
+        Sort sort = Sort.by(Sort.Direction.fromString(searchBody.getDirection()), searchBody.getOrderBy());
         int page = searchBody.getStart() / searchBody.getLength();
 
-        Pageable pageable = new PageRequest(page, searchBody.getLength(), sort);
+        Pageable pageable = PageRequest.of(page, searchBody.getLength(), sort);
 
         Specification<House> specification = (root, query, cb) -> {
             Predicate predicate = cb.equal(root.get("adminId"), LoginUserUtil.getLoginUserId());
@@ -454,7 +454,7 @@ public class HouseServiceImpl implements IHouseService {
             int start,
             int size) {
         Long userId = LoginUserUtil.getLoginUserId();
-        Pageable pageable = new PageRequest(start / size, size, new Sort(Sort.Direction.DESC, "createTime"));
+        Pageable pageable = PageRequest.of(start / size, size, Sort.by(Sort.Direction.DESC, "createTime"));
 
         Page<HouseSubscribe> page = subscribeRespository.findAllByUserIdAndStatus(userId, status.getValue(), pageable);
 
@@ -499,7 +499,7 @@ public class HouseServiceImpl implements IHouseService {
     @Override
     public ServiceMultiResult<Pair<HouseDTO, HouseSubscribeDTO>> findSubscribeList(int start, int size) {
         Long userId = LoginUserUtil.getLoginUserId();
-        Pageable pageable = new PageRequest(start / size, size, new Sort(Sort.Direction.DESC, "orderTime"));
+        Pageable pageable = PageRequest.of(start / size, size, Sort.by(Sort.Direction.DESC, "orderTime"));
 
         Page<HouseSubscribe> page = subscribeRespository.findAllByAdminIdAndStatus(userId, HouseSubscribeStatus.IN_ORDER_TIME.getValue(), pageable);
 
@@ -552,7 +552,7 @@ public class HouseServiceImpl implements IHouseService {
         Sort sort = HouseSort.generateSort(rentSearch.getOrderBy(), rentSearch.getOrderDirection());
         int page = rentSearch.getStart() / rentSearch.getSize();
 
-        Pageable pageable = new PageRequest(page, rentSearch.getSize(), sort);
+        Pageable pageable = PageRequest.of(page, rentSearch.getSize(), sort);
 
         Specification<House> specification = (root, criteriaQuery, criteriaBuilder) -> {
             Predicate predicate = criteriaBuilder.equal(root.get("status"), HouseStatus.PASSES.getValue());

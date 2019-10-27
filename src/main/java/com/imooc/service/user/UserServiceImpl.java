@@ -7,9 +7,10 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +38,7 @@ public class UserServiceImpl implements IUserService {
     @Autowired
     private ModelMapper modelMapper;
 
-    private final Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
     public User findUserByName(String userName) {
@@ -60,7 +61,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public ServiceResult<UserDTO> findById(Long userId) {
-        User user = userRepository.findOne(userId);
+        User user = userRepository.findById(userId).orElse(null);
         if (user == null) {
             return ServiceResult.notFound();
         }
@@ -120,7 +121,7 @@ public class UserServiceImpl implements IUserService {
                 userRepository.updateEmail(userId, value);
                 break;
             case "password":
-                userRepository.updatePassword(userId, this.passwordEncoder.encodePassword(value, userId));
+                userRepository.updatePassword(userId, this.passwordEncoder.encode(value));
                 break;
             default:
                 return new ServiceResult(false, "不支持的属性");

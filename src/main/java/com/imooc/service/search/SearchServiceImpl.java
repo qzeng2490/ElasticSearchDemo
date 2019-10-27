@@ -8,7 +8,7 @@ import java.util.Set;
 
 import org.elasticsearch.action.admin.indices.analyze.AnalyzeAction;
 import org.elasticsearch.action.admin.indices.analyze.AnalyzeRequestBuilder;
-import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse;
+//import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchRequestBuilder;
@@ -126,7 +126,7 @@ public class SearchServiceImpl implements ISearchService {
     private void createOrUpdateIndex(HouseIndexMessage message) {
         Long houseId = message.getHouseId();
 
-        House house = houseRepository.findOne(houseId);
+        House house = houseRepository.findById(houseId).orElse(null);
         if (house == null) {
             logger.error("Index house {} dose not exist!", houseId);
             this.index(houseId, message.getRetry() + 1);
@@ -169,7 +169,7 @@ public class SearchServiceImpl implements ISearchService {
         SearchResponse searchResponse = requestBuilder.get();
 
         boolean success;
-        long totalHit = searchResponse.getHits().getTotalHits();
+        long totalHit = searchResponse.getHits().getTotalHits().value;
         if (totalHit == 0) {
             success = create(indexTemplate);
         } else if (totalHit == 1) {
@@ -193,8 +193,7 @@ public class SearchServiceImpl implements ISearchService {
 
     private void removeIndex(HouseIndexMessage message) {
         Long houseId = message.getHouseId();
-        DeleteByQueryRequestBuilder builder = DeleteByQueryAction.INSTANCE
-                .newRequestBuilder(esClient)
+        DeleteByQueryRequestBuilder builder = new DeleteByQueryRequestBuilder(esClient,DeleteByQueryAction.INSTANCE)
                 .filter(QueryBuilders.termQuery(HouseIndexKey.HOUSE_ID, houseId))
                 .source(INDEX_NAME);
 
@@ -276,8 +275,7 @@ public class SearchServiceImpl implements ISearchService {
     }
 
     private boolean deleteAndCreate(long totalHit, HouseIndexTemplate indexTemplate) {
-        DeleteByQueryRequestBuilder builder = DeleteByQueryAction.INSTANCE
-                .newRequestBuilder(esClient)
+        DeleteByQueryRequestBuilder builder = new DeleteByQueryRequestBuilder(esClient,DeleteByQueryAction.INSTANCE)
                 .filter(QueryBuilders.termQuery(HouseIndexKey.HOUSE_ID, indexTemplate.getHouseId()))
                 .source(INDEX_NAME);
 
@@ -384,11 +382,11 @@ public class SearchServiceImpl implements ISearchService {
         }
 
         for (SearchHit hit : response.getHits()) {
-            System.out.println(hit.getSource());
-            houseIds.add(Longs.tryParse(String.valueOf(hit.getSource().get(HouseIndexKey.HOUSE_ID))));
+            System.out.println(hit.getSourceAsMap());
+            houseIds.add(Longs.tryParse(String.valueOf(hit.getSourceAsMap().get(HouseIndexKey.HOUSE_ID))));
         }
 
-        return new ServiceMultiResult<>(response.getHits().totalHits, houseIds);
+        return new ServiceMultiResult<>(response.getHits().getTotalHits().value, houseIds);
     }
 
     @Override
@@ -496,7 +494,7 @@ public class SearchServiceImpl implements ISearchService {
             buckets.add(new HouseBucketDTO(bucket.getKeyAsString(), bucket.getDocCount()));
         }
 
-        return new ServiceMultiResult<>(response.getHits().getTotalHits(), buckets);
+        return new ServiceMultiResult<>(response.getHits().getTotalHits().value, buckets);
     }
 
     @Override
@@ -522,9 +520,9 @@ public class SearchServiceImpl implements ISearchService {
         }
 
         for (SearchHit hit : response.getHits()) {
-            houseIds.add(Longs.tryParse(String.valueOf(hit.getSource().get(HouseIndexKey.HOUSE_ID))));
+            houseIds.add(Longs.tryParse(String.valueOf(hit.getSourceAsMap().get(HouseIndexKey.HOUSE_ID))));
         }
-        return new ServiceMultiResult<>(response.getHits().getTotalHits(), houseIds);
+        return new ServiceMultiResult<>(response.getHits().getTotalHits().value, houseIds);
     }
 
     @Override
@@ -555,9 +553,9 @@ public class SearchServiceImpl implements ISearchService {
         }
 
         for (SearchHit hit : response.getHits()) {
-            houseIds.add(Longs.tryParse(String.valueOf(hit.getSource().get(HouseIndexKey.HOUSE_ID))));
+            houseIds.add(Longs.tryParse(String.valueOf(hit.getSourceAsMap().get(HouseIndexKey.HOUSE_ID))));
         }
-        return new ServiceMultiResult<>(response.getHits().getTotalHits(), houseIds);
+        return new ServiceMultiResult<>(response.getHits().getTotalHits().value, houseIds);
     }
 
     private boolean updateSuggest(HouseIndexTemplate indexTemplate) {
@@ -569,15 +567,15 @@ public class SearchServiceImpl implements ISearchService {
 
         requestBuilder.setAnalyzer("ik_smart");
 
-        AnalyzeResponse response = requestBuilder.get();
-        List<AnalyzeResponse.AnalyzeToken> tokens = response.getTokens();
+        AnalyzeAction.Response response = requestBuilder.get();
+        List<AnalyzeAction.AnalyzeToken> tokens = response.getTokens();
         if (tokens == null) {
             logger.warn("Can not analyze token for house: " + indexTemplate.getHouseId());
             return false;
         }
 
         List<HouseSuggest> suggests = new ArrayList<>();
-        for (AnalyzeResponse.AnalyzeToken token : tokens) {
+        for (AnalyzeAction.AnalyzeToken token : tokens) {
             // 排序数字类型 & 小于2个字符的分词结果
             if ("<NUM>".equals(token.getType()) || token.getTerm().length() < 2) {
                 continue;

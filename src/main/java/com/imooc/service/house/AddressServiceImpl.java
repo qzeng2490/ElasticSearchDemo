@@ -146,7 +146,7 @@ public class AddressServiceImpl implements IAddressService {
         if (subwayId == null) {
             return ServiceResult.notFound();
         }
-        Subway subway = subwayRepository.findOne(subwayId);
+        Subway subway = subwayRepository.findById(subwayId).orElse(null);
         if (subway == null) {
             return ServiceResult.notFound();
         }
@@ -158,7 +158,7 @@ public class AddressServiceImpl implements IAddressService {
         if (stationId == null) {
             return ServiceResult.notFound();
         }
-        SubwayStation station = subwayStationRepository.findOne(stationId);
+        SubwayStation station = subwayStationRepository.findById(stationId).orElse(null);
         if (station == null) {
             return ServiceResult.notFound();
         }
