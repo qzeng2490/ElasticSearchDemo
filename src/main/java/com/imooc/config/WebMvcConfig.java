@@ -24,6 +24,10 @@ public class WebMvcConfig implements WebMvcConfigurer ,ApplicationContextAware {
     @Value("${spring.thymeleaf.cache}")
     private boolean thymeleafCacheEnable = true;
 
+    public final static String TEMPLATE_PREFIX = "templates/";
+    public final static String TEMPLATE_SUFFIX = ".html";
+    public final static String TEMPLATE_MODE = "HTML";
+
     private ApplicationContext applicationContext;
 
     @Override
@@ -49,7 +53,11 @@ public class WebMvcConfig implements WebMvcConfigurer ,ApplicationContextAware {
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
         templateResolver.setApplicationContext(this.applicationContext);
         templateResolver.setCharacterEncoding("UTF-8");
+        templateResolver.setPrefix(TEMPLATE_PREFIX);
+        templateResolver.setSuffix(TEMPLATE_SUFFIX);
+        templateResolver.setTemplateMode(TEMPLATE_MODE);
         templateResolver.setCacheable(thymeleafCacheEnable);
+
         return templateResolver;
     }
 

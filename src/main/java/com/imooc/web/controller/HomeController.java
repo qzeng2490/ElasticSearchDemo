@@ -23,6 +23,7 @@ public class HomeController {
 
     @GetMapping(value = {"/", "/index"})
     public String index(Model model) {
+        System.out.println("xxxxxx");
         return "index";
     }
 
