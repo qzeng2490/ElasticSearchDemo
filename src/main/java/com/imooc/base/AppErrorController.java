@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
 /**
@@ -61,9 +62,9 @@ public class AppErrorController implements ErrorController {
     @RequestMapping(value = ERROR_PATH)
     @ResponseBody
     public ApiResponse errorApiHandler(HttpServletRequest request) {
-        RequestAttributes requestAttributes = new ServletRequestAttributes(request);
+//        RequestAttributes requestAttributes = new ServletRequestAttributes(request);
 
-        Map<String, Object> attr = this.errorAttributes.getErrorAttributes((WebRequest) requestAttributes, false);
+        Map<String, Object> attr = this.errorAttributes.getErrorAttributes(new ServletWebRequest(request), false);
         int status = getStatus(request);
 
         return ApiResponse.ofMessage(status, String.valueOf(attr.getOrDefault("message", "error")));

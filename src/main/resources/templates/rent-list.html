@@ -79,8 +79,9 @@
                             <a data-bind="*"
                                onclick="changeSimpleCondition('regionEnName', '*')">不限</a>
                             <tr th:each="region, regionStat: ${regions}">
-                                <a th:attr="data-bind=${region.enName}" href="javascript:void(0);"
-                                   th:onclick="'changeSimpleCondition(\'regionEnName\', \'' + ${region.enName} + '\')'"
+                                <a th:data1="${region.enName}"
+                                   th:attr="data-bind=${region.enName}" href="javascript:void(0);"
+                                   th:onclick="'changeSimpleCondition(\'regionEnName\', \'' + this.getAttribute('data1') + '\')'"
                                    th:text="${region.cnName}"></a>
                             </tr>
                         </div>
@@ -94,8 +95,9 @@
                                onclick="changeSimpleCondition('priceBlock', '*')">不限
                             </a>
                             <tr th:each="priceBlock : ${priceBlocks}">
-                                <a th:attr="data-bind=${priceBlock.key}" href="javascript:void(0);"
-                                   th:onclick="'changeSimpleCondition(\'priceBlock\',\'' + ${priceBlock.key} + '\')'"
+                                <a th:data1="${priceBlock.key}"
+                                   th:attr="data-bind=${priceBlock.key}" href="javascript:void(0);"
+                                   th:onclick="'changeSimpleCondition(\'priceBlock\',\'' + this.getAttribute('data1') + '\')'"
                                    th:text="${priceBlock.value.min < 0} ? (${priceBlock.value.max} + '元以下' ):
                                     (${priceBlock.value.max < 0} ? ${priceBlock.value.min} + '元以上' :
                                      ${priceBlock.value.min} + '-' + ${priceBlock.value.max} + '元')">
@@ -112,8 +114,9 @@
                                onclick="changeSimpleCondition('areaBlock', '*')">不限
                             </a>
                             <tr th:each="areaBlock : ${areaBlocks}">
-                                <a th:attr="data-bind=${areaBlock.key}" href="javascript:void(0);"
-                                   th:onclick="'changeSimpleCondition(\'areaBlock\',\'' + ${areaBlock.key} + '\')'"
+                                <a th:data1="${areaBlock.key}"
+                                   th:attr="data-bind=${areaBlock.key}" href="javascript:void(0);"
+                                   th:onclick="'changeSimpleCondition(\'areaBlock\',\'' + this.getAttribute('data1') + '\')'"
                                    th:text="${areaBlock.value.min < 0} ? (${areaBlock.value.max} + '平以下' ):
                                     (${areaBlock.value.max < 0} ? ${areaBlock.value.min} + '平以上' :
                                      ${areaBlock.value.min} + '-' + ${areaBlock.value.max} + '平')">

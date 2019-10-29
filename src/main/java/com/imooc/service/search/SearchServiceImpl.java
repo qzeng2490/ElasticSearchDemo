@@ -162,7 +162,7 @@ public class SearchServiceImpl implements ISearchService {
             indexTemplate.setTags(tagStrings);
         }
 
-        SearchRequestBuilder requestBuilder = this.esClient.prepareSearch(INDEX_NAME).setTypes(INDEX_TYPE)
+        SearchRequestBuilder requestBuilder = this.esClient.prepareSearch(INDEX_NAME)
                 .setQuery(QueryBuilders.termQuery(HouseIndexKey.HOUSE_ID, houseId));
 
         logger.debug(requestBuilder.toString());
@@ -397,7 +397,6 @@ public class SearchServiceImpl implements ISearchService {
         suggestBuilder.addSuggestion("autocomplete", suggestion);
 
         SearchRequestBuilder requestBuilder = this.esClient.prepareSearch(INDEX_NAME)
-                .setTypes(INDEX_TYPE)
                 .suggest(suggestBuilder);
         logger.debug(requestBuilder.toString());
 
@@ -446,7 +445,6 @@ public class SearchServiceImpl implements ISearchService {
                 .filter(QueryBuilders.termQuery(HouseIndexKey.DISTRICT, district));
 
         SearchRequestBuilder requestBuilder = this.esClient.prepareSearch(INDEX_NAME)
-                .setTypes(INDEX_TYPE)
                 .setQuery(boolQuery)
                 .addAggregation(
                         AggregationBuilders.terms(HouseIndexKey.AGG_DISTRICT)
@@ -476,7 +474,6 @@ public class SearchServiceImpl implements ISearchService {
         AggregationBuilder aggBuilder = AggregationBuilders.terms(HouseIndexKey.AGG_REGION)
                 .field(HouseIndexKey.REGION_EN_NAME);
         SearchRequestBuilder requestBuilder = this.esClient.prepareSearch(INDEX_NAME)
-                .setTypes(INDEX_TYPE)
                 .setQuery(boolQuery)
                 .addAggregation(aggBuilder);
 
@@ -506,7 +503,6 @@ public class SearchServiceImpl implements ISearchService {
         boolQuery.filter(QueryBuilders.termQuery(HouseIndexKey.CITY_EN_NAME, cityEnName));
 
         SearchRequestBuilder searchRequestBuilder = this.esClient.prepareSearch(INDEX_NAME)
-                .setTypes(INDEX_TYPE)
                 .setQuery(boolQuery)
                 .addSort(HouseSort.getSortKey(orderBy), SortOrder.fromString(orderDirection))
                 .setFrom(start)
@@ -538,7 +534,6 @@ public class SearchServiceImpl implements ISearchService {
                 ));
 
         SearchRequestBuilder builder = this.esClient.prepareSearch(INDEX_NAME)
-                .setTypes(INDEX_TYPE)
                 .setQuery(boolQuery)
                 .addSort(HouseSort.getSortKey(mapSearch.getOrderBy()),
                         SortOrder.fromString(mapSearch.getOrderDirection()))
