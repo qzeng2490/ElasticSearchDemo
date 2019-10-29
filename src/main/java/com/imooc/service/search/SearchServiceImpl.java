@@ -362,7 +362,6 @@ public class SearchServiceImpl implements ISearchService {
                 ));
 
         SearchRequestBuilder requestBuilder = this.esClient.prepareSearch(INDEX_NAME)
-                .setTypes(INDEX_TYPE)
                 .setQuery(boolQuery)
                 .addSort(
                         HouseSort.getSortKey(rentSearch.getOrderBy()),

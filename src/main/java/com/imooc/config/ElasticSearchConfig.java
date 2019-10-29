@@ -48,9 +48,10 @@ public class ElasticSearchConfig {
         Settings settings = Settings.builder()
                 .put("cluster.name", this.esName)
 //                .put("cluster.name", "elasticsearch")
-                .put("client.transport.sniff", true)
+                .put("client.transport.sniff", false)
                 .build();
-
+        System.out.println("--------------");
+        System.out.println("cluster_name: " + this.esName);
         TransportAddress master = new TransportAddress(
             InetAddress.getByName(esHost), esPort
 //          InetAddress.getByName("10.99.207.76"), 8999
