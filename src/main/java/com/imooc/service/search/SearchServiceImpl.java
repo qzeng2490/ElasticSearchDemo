@@ -71,7 +71,7 @@ public class SearchServiceImpl implements ISearchService {
 
     private static final String INDEX_NAME = "xunwu";
 
-    private static final String INDEX_TYPE = "house";
+    private static final String INDEX_TYPE = "_doc";
 
     private static final String INDEX_TOPIC = "house_build";
 

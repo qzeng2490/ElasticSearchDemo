@@ -243,7 +243,7 @@ CREATE TABLE `user` (
   `name` varchar(32) DEFAULT NULL COMMENT '用户名',
   `email` varchar(32) DEFAULT NULL COMMENT '电子邮箱',
   `phone_number` varchar(15) NOT NULL COMMENT '电话号码',
-  `password` varchar(32) DEFAULT NULL COMMENT '密码',
+  `password` varchar(256) DEFAULT NULL COMMENT '密码',
   `status` int(2) unsigned NOT NULL DEFAULT '0' COMMENT '用户状态 0-正常 1-封禁',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '用户账号创建时间',
   `last_login_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '上次登录时间',
@@ -259,7 +259,7 @@ CREATE TABLE `user` (
 --  Records of `user`
 -- ----------------------------
 BEGIN;
-INSERT INTO `user` VALUES ('1', 'waliwali', 'wali@wali.com', '15111111111', '6fd1aad88b038aeecd9adeccc92b0bd1', '1', '2017-08-25 15:18:20', '2017-08-25 12:00:00', '2017-11-26 10:29:02', 'http://7xo6gy.com1.z0.glb.clouddn.com/99ff568bd61c744bf31185aeddf13580.png'), ('2', 'admin', 'admin@imooc.com', '1388888888', '55b3d0936a3fb63168d57a6bda0ddbbf', '1', '2017-08-27 09:07:05', '2017-08-27 09:07:07', '2017-10-21 15:03:57', 'http://7xo6gy.com1.z0.glb.clouddn.com/99ff568bd61c744bf31185aeddf13580.png'), ('5', '138****8888', null, '13888888888', null, '0', '2017-11-25 17:56:45', '2017-11-25 17:56:45', '2017-11-25 17:56:45', null), ('8', '151****9677', null, '15110059677', null, '0', '2017-11-25 18:58:18', '2017-11-25 18:58:18', '2017-11-25 18:58:18', null);
+INSERT INTO `user` VALUES ('1', 'waliwali', 'wali@wali.com', '15111111111', '$2a$10$e7XEupvyCAhYtRjPf5ROQuNAghJL.EMreGxxafPvymPEqod6N3BBW', '0', '2017-08-25 15:18:20', '2017-08-25 12:00:00', '2017-11-26 10:29:02', 'http://7xo6gy.com1.z0.glb.clouddn.com/99ff568bd61c744bf31185aeddf13580.png'), ('2', 'admin', 'admin@imooc.com', '1388888888', '$2a$10$e7XEupvyCAhYtRjPf5ROQuNAghJL.EMreGxxafPvymPEqod6N3BBW', '0', '2017-08-27 09:07:05', '2017-08-27 09:07:07', '2017-10-21 15:03:57', 'http://7xo6gy.com1.z0.glb.clouddn.com/99ff568bd61c744bf31185aeddf13580.png'), ('5', '138****8888', null, '13888888888', null, '0', '2017-11-25 17:56:45', '2017-11-25 17:56:45', '2017-11-25 17:56:45', null), ('8', '151****9677', null, '15110059677', null, '0', '2017-11-25 18:58:18', '2017-11-25 18:58:18', '2017-11-25 18:58:18', null);
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
